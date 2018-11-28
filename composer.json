@@ -1,0 +1,21 @@
+{
+    "name": "nooclik/yii2-blog",
+    "description": "Blog for Yii2",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dashkevich Yauhen",
+            "email": "nooclik@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "nooclik\\blog\\": ""
+        }
+    }
+}
