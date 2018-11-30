@@ -1,5 +1,7 @@
 <?php
 
+//use nooclik\blog\BlogAsset;
+use nooclik\blog\BlogAsset;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -18,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Новая рубрика', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Новая рубрика', ['form'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -26,18 +28,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             [
+                'format' => 'html',
                 'attribute' => 'category_title',
                 'value' => function ($model) {
-                    return Html::a($model->category_update, ['form', 'id' => $model->id]);
+                    return Html::a($model->category_title, ['form', 'id' => $model->id]);
                 }
             ],
-            //'category_thumbnail',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}'
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>
 </div>
+<?php
+BlogAsset::register($this);

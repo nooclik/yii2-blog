@@ -60,12 +60,14 @@ class CategoryController extends Controller
     public function actionForm($id = null)
     {
         $model = isset($id) ? Category::findOne($id) : new Category();
+        
+        $category = Category::getList();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
             $this->redirect('/blog/category');
         }
-        return $this->render('_form', compact('model'));
+        return $this->render('_form', compact('model', 'category'));
     }
 
     /**

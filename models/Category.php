@@ -3,6 +3,7 @@
 namespace nooclik\blog\models;
 
 use Yii;
+use yii\behaviors\SluggableBehavior;
 
 /**
  * This is the model class for table "category".
@@ -14,7 +15,6 @@ use Yii;
  * @property int $category_parent Родительская категория
  * @property string $category_thumbnail Изображение
  *
- * @property PostCategory[] $postCategories
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -32,10 +32,21 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_title', 'category_slug'], 'required'],
+            [['category_title'], 'required'],
             [['category_title', 'category_description'], 'string'],
             [['category_parent'], 'integer'],
             [['category_slug', 'category_thumbnail'], 'string', 'max' => 200],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'slug' => [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'category_title',
+                'slugAttribute' => 'category_slug'
+            ]
         ];
     }
 
@@ -46,11 +57,11 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'category_title' => 'Category Title',
-            'category_slug' => 'Category Slug',
-            'category_description' => 'Category Description',
-            'category_parent' => 'Category Parent',
-            'category_thumbnail' => 'Category Thumbnail',
+            'category_title' => 'Заголовок',
+            'category_slug' => 'Слаг',
+            'category_description' => 'Описание',
+            'category_parent' => 'Родитель',
+            'category_thumbnail' => 'Изображение',
         ];
     }
 

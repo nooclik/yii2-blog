@@ -18,7 +18,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $post_type Тип (запись/страница)
  * @property string $post_thumbnail Изображение записи
  * @property int $created_at Создано
- * @property int $update_at Обновлено
+ * @property int $updated_at Обновлено
  *
  * @property PostCategory[] $postCategories
  */
@@ -52,7 +52,7 @@ class Post extends \yii\db\ActiveRecord
         return [
             [['post_title'], 'required'],
             [['post_title', 'post_content'], 'string'],
-            [['post_author_id', 'post_status', 'post_type', 'category', 'created_at', 'update_at'], 'integer'],
+            [['post_author_id', 'post_status', 'post_type', 'category', 'created_at', 'updated_at'], 'integer'],
             [['post_slug'], 'string', 'max' => 200],
             [['post_thumbnail'], 'string', 'max' => 20],
         ];
@@ -74,7 +74,7 @@ class Post extends \yii\db\ActiveRecord
             'post_type' => 'Тип',
             'post_thumbnail' => 'Изображение',
             'created_at' => 'Создано',
-            'update_at' => 'Обновлено',
+            'updated_at' => 'Обновлено',
         ];
     }
 
@@ -85,6 +85,9 @@ class Post extends \yii\db\ActiveRecord
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'post_title',
                 'slugAttribute' => 'post_slug',
+            ],
+            'time' => [
+                'class' => TimestampBehavior::className(),
             ]
         ];
     }

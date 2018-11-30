@@ -8,6 +8,7 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model nooclik\blog\models\Post */
 /* @var $form yii\widgets\ActiveForm */
+$this->title = 'Запись';
 ?>
 
 <div class="posts-form">
@@ -15,8 +16,6 @@ use kartik\select2\Select2;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'post_title')->textInput() ?>
-
-    <?= $form->field($model, 'post_slug')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'post_content')->widget(Widget::className(), [
         'settings' => [

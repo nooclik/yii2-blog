@@ -62,6 +62,12 @@ class PostController extends Controller
 
         $model->post_author_id = Yii::$app->user->id;
 
+        if ($model->load(Yii::$app->request->post()))
+        {
+            $model->save();
+            $this->redirect('index');
+        }
+
         return $this->render('_form', compact('model', 'category', 'status'));
     }
 
