@@ -3,11 +3,12 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel nooclik\blog\models\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Categories';
+$this->title = 'Рубрики';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-index">
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Новая рубрика', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,10 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'category_title:ntext',
-            'category_slug',
-            'category_description:ntext',
-            'category_parent',
+            [
+                'attribute' => 'category_title',
+                'value' => function ($model) {
+                    return Html::a($model->category_update, ['form', 'id' => $model->id]);
+                }
+            ],
             //'category_thumbnail',
 
             ['class' => 'yii\grid\ActionColumn'],
