@@ -5,6 +5,7 @@ namespace nooclik\blog\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "posts".
@@ -29,9 +30,15 @@ class Post extends \yii\db\ActiveRecord
         1 => 'Черновик'
     ];
 
+    const POST_TYPE_SINGLE = 'single';
+    const POST_TYPE_PAGE = 'page';
+
+    const SCENARIO_SINGLE = self::POST_TYPE_SINGLE;
+    const SCENARIO_PAGE = self::POST_TYPE_PAGE;
+
     const TYPE = [
-        0 => 'Запись',
-        1 => 'Страница'
+        self::POST_TYPE_SINGLE => 'Запись',
+        self::POST_TYPE_PAGE => 'Страница'
     ];
 
     public $category;
@@ -50,12 +57,24 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['post_title'], 'required'],
-            [['post_title', 'post_content'], 'string'],
-            [['post_author_id', 'post_status', 'post_type', 'category', 'created_at', 'updated_at'], 'integer'],
+            [['post_title', 'category'], 'required'],
+            [['post_title', 'post_type'], 'string'],
+            [['post_author_id', 'post_status', 'created_at', 'updated_at'], 'integer'],
+            [['category', 'post_content'], 'safe'],
             [['post_slug'], 'string', 'max' => 200],
             [['post_thumbnail'], 'string', 'max' => 20],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['single'] = ['post_title', 'category', 'post_content', 'post_status', 'post_thumbnail'];
+        $scenarios['page'] = ['post_title', 'post_content', 'post_status',];
+        return $scenarios;
     }
 
     /**
@@ -88,17 +107,15 @@ class Post extends \yii\db\ActiveRecord
             ],
             'time' => [
                 'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'post_author_id',
+                'updatedByAttribute' => 'post_author_id',
             ]
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPostCategories()
-    {
-//        return $this->hasMany(PostCategory::className(), ['post_id' => 'id']);
-    }
 
     /**
      * {@inheritdoc}

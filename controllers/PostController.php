@@ -3,6 +3,7 @@
 namespace nooclik\blog\controllers;
 
 use nooclik\blog\models\Category;
+use nooclik\blog\models\PostCategory;
 use Yii;
 use nooclik\blog\models\Post;
 use nooclik\blog\models\PostSearch;
@@ -54,17 +55,39 @@ class PostController extends Controller
     }
 
 
-    public function actionForm($id = null)
+    public function actionForm($id = null, $post_type)
     {
         $model = isset($id) ? Post::findOne($id) : new Post();
+
+        if (!$model->isNewRecord) {
+            $model->category = PostCategory::getCategoryByPost($id);
+        }
+
+        switch ($post_type) {
+            case POST::SCENARIO_SINGLE :
+                $model->scenario = POST::SCENARIO_SINGLE;
+                break;
+            case POST::SCENARIO_PAGE:
+                $model->scenario = POST::SCENARIO_PAGE;
+                break;
+            default :
+                $model->scenario = POST::SCENARIO_SINGLE;
+        }
+
         $category = Category::getList();
         $status = Post::STATUS;
 
-        $model->post_author_id = Yii::$app->user->id;
-
         if ($model->load(Yii::$app->request->post()))
         {
+            $model->post_type = $model->getScenario();
             $model->save();
+
+            if ($model->getScenario() == Post::SCENARIO_SINGLE) {
+                foreach ($model->category as $item) {
+                    PostCategory::save($model->id, (int)$item);
+                }
+            }
+
             $this->redirect('index');
         }
 

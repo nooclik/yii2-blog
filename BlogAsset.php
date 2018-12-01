@@ -6,7 +6,8 @@ use yii\web\AssetBundle;
 
 class BlogAsset extends AssetBundle
 {
-//    public $sourcePath = '@vendor/nooclik/blog/assets';
+    public $baseUrl = '@web';
+    public $sourcePath = '@vendor/nooclik/yii2-blog/assets';
 
     public $css = [
         'css/blog.css',

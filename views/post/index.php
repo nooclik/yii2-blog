@@ -19,19 +19,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить', ['form'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> Новая запись', ['form', 'post_type' => POST::SCENARIO_SINGLE], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> Новая страница', ['form', 'post_type' => POST::SCENARIO_PAGE], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => function ($model) {
+            if ($model->post_status == 1) {
+                return ['class' => 'text-muted'];
+            }
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'format' => 'html',
                 'attribute' => 'post_title',
                 'value' => function ($model) {
-                    return Html::a($model->post_title, ['form', 'id' => $model->id]);
+                    return Html::a($model->post_title, ['form', 'id' => $model->id, 'post_type' => $model->post_type]);
                 }
             ],
             'post_author_id',
@@ -49,7 +55,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => Html::activeDropDownList($searchModel, 'post_type', Post::TYPE, ['prompt' => 'Все', 'class' => 'form-control'])
             ],
-            'created_at',
+            [
+                'attribute' => 'created_at',
+                'value' => function ($model) {
+                    return Yii::$app->formatter->asDate($model->created_at, 'long');
+                }
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{delete}',

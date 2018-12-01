@@ -15,12 +15,12 @@ $this->title = 'Запись';
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'post_title')->textInput() ?>
+    <?= $form->field($model, 'post_title')->textInput(['placeholder' => 'Введите заголовок...']) ?>
 
     <?= $form->field($model, 'post_content')->widget(Widget::className(), [
         'settings' => [
             'lang' => 'ru',
-            'minHeight' => 200,
+            'minHeight' => 300,
             'plugins' => [
                 'clips',
                 'fullscreen',
@@ -28,21 +28,21 @@ $this->title = 'Запись';
         ],
     ]); ?>
 
-    <?= $form->field($model, 'post_author_id')->textInput() ?>
+    <?php if ($model->getScenario() == \nooclik\blog\models\Post::SCENARIO_SINGLE): ?>
+        <?= $form->field($model, 'category')->widget(Select2::classname(), [
+            'data' => $category,
+            'options' => ['placeholder' => 'Выберите категорию...', 'multiple' => true],
+            'pluginOptions' => [
+                'tags' => true,
+                'tokenSeparators' => [',', ' '],
+                'maximumInputLength' => 10
+            ],
+        ]) ?>
 
-    <?= $form->field($model, 'category')->widget(Select2::classname(), [
-        'data' => $category,
-        'options' => ['placeholder' => 'Категория ...', 'multiple' => true],
-        'pluginOptions' => [
-            'tags' => true,
-            'tokenSeparators' => [',', ' '],
-            'maximumInputLength' => 10
-        ],
-    ]) ?>
+        <?= $form->field($model, 'post_thumbnail')->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'post_status')->dropDownList($status) ?>
-
-    <?= $form->field($model, 'post_thumbnail')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

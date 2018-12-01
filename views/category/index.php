@@ -1,7 +1,5 @@
 <?php
 
-//use nooclik\blog\BlogAsset;
-use nooclik\blog\BlogAsset;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -11,7 +9,7 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Рубрики';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $this->title;;
 ?>
 <div class="category-index">
 
@@ -44,5 +42,3 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <?php Pjax::end(); ?>
 </div>
-<?php
-BlogAsset::register($this);
