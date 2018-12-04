@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "posts".
@@ -42,6 +43,7 @@ class Post extends \yii\db\ActiveRecord
     ];
 
     public $category;
+    public $image;
 
     /**
      * {@inheritdoc}
@@ -63,6 +65,7 @@ class Post extends \yii\db\ActiveRecord
             [['category', 'post_content'], 'safe'],
             [['post_slug'], 'string', 'max' => 200],
             [['post_thumbnail'], 'string', 'max' => 20],
+            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
         ];
     }
 
@@ -91,7 +94,7 @@ class Post extends \yii\db\ActiveRecord
             'post_status' => 'Статус',
             'category' => 'Категория',
             'post_type' => 'Тип',
-            'post_thumbnail' => 'Изображение',
+            'image' => 'Изображение',
             'created_at' => 'Создано',
             'updated_at' => 'Обновлено',
         ];
@@ -114,6 +117,13 @@ class Post extends \yii\db\ActiveRecord
                 'updatedByAttribute' => 'post_author_id',
             ]
         ];
+    }
+
+    public function imageUpload()
+    {
+        $img = time() . '.' . $this->image->extension;
+        $this->image->saveAs('images/' . $img);
+        $this->post_thumbnail = $img;
     }
 
 

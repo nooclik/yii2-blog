@@ -11,6 +11,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * PostsController implements the CRUD actions for Posts model.
@@ -39,6 +40,28 @@ class PostController extends Controller
                         'roles' => ['@']
                     ],
                 ]
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'image-upload' => [
+                'class' => 'vova07\imperavi\actions\UploadFileAction',
+                'url' => '/images/', // Directory URL address, where files are stored.
+                'path' => '@webroot/images/', // Or absolute path to directory where files are stored.
+            ],
+            'images-get' => [
+                'class' => 'vova07\imperavi\actions\GetImagesAction',
+                'url' => '/images/', // Directory URL address, where files are stored.
+                'path' => '@webroot/images/', // Or absolute path to directory where files are stored.
+                'options' => ['only' => ['*.jpg', '*.jpeg', '*.png', '*.gif', '*.ico']], // These options are by default.
+            ],
+            'file-delete' => [
+                'class' => 'vova07\imperavi\actions\DeleteFileAction',
+                'url' => '/images/', // Directory URL address, where files are stored.
+                'path' => '@webroot/images/', // Or absolute path to directory where files are stored.
             ],
         ];
     }
@@ -77,10 +100,14 @@ class PostController extends Controller
         $category = Category::getList();
         $status = Post::STATUS;
 
-        if ($model->load(Yii::$app->request->post()))
-        {
+        if ($model->load(Yii::$app->request->post())) {
             $model->post_type = $model->getScenario();
+            $model->image = UploadedFile::getInstance($model, 'image');
+            if ($model->image) {
+                $model->imageUpload();
+            }
             $model->save();
+
 
             if ($model->getScenario() == Post::SCENARIO_SINGLE) {
                 foreach ($model->category as $item) {

@@ -59,8 +59,8 @@ BlogAsset::register($this);
     ]);
     NavBar::end();
     ?>
-
-    <div class="container">
+    <div class="clearfix"></div>
+    <div class="container-fluid">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
