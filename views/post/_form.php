@@ -30,6 +30,7 @@ $this->title = 'Запись';
                     'imageUpload' => Url::to(['image-upload']),
                     'imageManagerJson' => Url::to(['images-get']),
                     'imageDelete' => Url::to(['file-delete']),
+//                    'buttons' => ['html'],
                     'plugins' => [
                         'clips',
                         'fullscreen',
@@ -37,12 +38,24 @@ $this->title = 'Запись';
                     ],
                 ],
             ]); ?>
+
+            <?= $form->field($model, 'post_meta_keywords')->widget(Select2::classname(), [
+                'options' => ['placeholder' => 'Введите ключевые слова...', 'multiple' => true],
+                'pluginOptions' => [
+                    'tags' => true,
+                    'tokenSeparators' => [','],
+                    'maximumInputLength' => 20
+                ],
+            ]) ?>
+
+            <?= $form->field($model, 'post_meta_description')->textarea() ?>
+
         </div>
         <div class="col-md-3">
 
             <div class="form-group">
                 <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
-                <?= Html::a('Отмена', 'index', ['class' => 'btn']) ?>
+                <?= Html::a('Отмена', 'index', ['class' => 'btn btn-default']) ?>
             </div>
 
             <?= $form->field($model, 'post_status')->dropDownList($status) ?>
@@ -57,8 +70,10 @@ $this->title = 'Запись';
                         'maximumInputLength' => 10
                     ],
                 ]) ?>
-
-               <?= $form->field($model, 'image')->fileInput(['class' => 'btn btn-primary']) ?>
+                <?php if ($model->post_thumbnail) : ?>
+                    <?= Html::img('/images/' . $model->post_thumbnail, ['class' => 'img-thumbnail']) ?>
+                <?php endif; ?>
+                <?= $form->field($model, 'image')->fileInput(['class' => 'btn btn-primary']) ?>
             <?php endif; ?>
         </div>
     </div>

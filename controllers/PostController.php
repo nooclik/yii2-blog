@@ -99,6 +99,7 @@ class PostController extends Controller
 
         $category = Category::getList();
         $status = Post::STATUS;
+        $model->post_meta_keywords = unserialize($model->post_meta_keywords);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->post_type = $model->getScenario();
@@ -106,6 +107,7 @@ class PostController extends Controller
             if ($model->image) {
                 $model->imageUpload();
             }
+            $model->post_meta_keywords = serialize($model->post_meta_keywords);
             $model->save();
 
 

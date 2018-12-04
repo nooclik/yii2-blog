@@ -15,6 +15,8 @@ use yii\web\UploadedFile;
  * @property string $post_title Заголовок
  * @property string $post_slug Слаг
  * @property string $post_content Содержимое
+ * @property string post_meta_description Мета-descriptoin
+ * @property string post_meta_keywords Мета-keywords
  * @property int $post_author_id ID автора
  * @property int $post_status Статус
  * @property int $post_type Тип (запись/страница)
@@ -60,9 +62,9 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['post_title', 'category'], 'required'],
-            [['post_title', 'post_type'], 'string'],
+            [['post_title', 'post_type', 'post_meta_description'], 'string'],
             [['post_author_id', 'post_status', 'created_at', 'updated_at'], 'integer'],
-            [['category', 'post_content'], 'safe'],
+            [['category', 'post_content', 'post_meta_keywords'], 'safe'],
             [['post_slug'], 'string', 'max' => 200],
             [['post_thumbnail'], 'string', 'max' => 20],
             [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
@@ -75,8 +77,8 @@ class Post extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['single'] = ['post_title', 'category', 'post_content', 'post_status', 'post_thumbnail'];
-        $scenarios['page'] = ['post_title', 'post_content', 'post_status',];
+        $scenarios['single'] = ['post_title', 'category', 'post_content', 'post_status', 'post_thumbnail', 'post_meta_description', 'post_meta_keywords'];
+        $scenarios['page'] = ['post_title', 'post_content', 'post_status', 'post_meta_description', 'post_meta_keywords'];
         return $scenarios;
     }
 
@@ -95,6 +97,8 @@ class Post extends \yii\db\ActiveRecord
             'category' => 'Категория',
             'post_type' => 'Тип',
             'image' => 'Изображение',
+            'post_meta_description' => 'Мета-descriptoin',
+            'post_meta_keywords' => 'Мета-keywords',
             'created_at' => 'Создано',
             'updated_at' => 'Обновлено',
         ];
