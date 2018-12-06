@@ -12,6 +12,7 @@ class Blog extends \yii\base\Module
      */
     public $controllerNamespace = 'nooclik\blog\controllers';
     public $layout = 'blog';
+    
     /**
      * {@inheritdoc}
      */

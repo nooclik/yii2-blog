@@ -12,7 +12,7 @@ class m181129_103435_create_table_category extends Migration
      */
     public function up()
     {
-        $this->createTable('category',[
+        $this->createTable('{{%category}}',[
             'id' => $this->primaryKey(),
             'category_title' => $this->text()->notNull()->comment('Заголовок'),
             'category_slug' => $this->string(200)->notNull()->comment('Слаг'),
@@ -27,6 +27,6 @@ class m181129_103435_create_table_category extends Migration
      */
     public function down()
     {
-        $this->dropTable('category');
+        $this->dropTable('{{%category}}');
     }
 }

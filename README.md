@@ -21,11 +21,21 @@ or add
 
 to the require section of your `composer.json` file.
 
+```php
+yii migrate/create --migrationPath="vendor\nooclik\yii2-blog\src\migrations" 
+```
 
 Usage
 -----
 
-Once the extension is installed, simply use it in your code by  :
-
-```php
-<?= \nooclik\blog\AutoloadExample::widget(); ?>```
+````php
+'modules' => [
+        'blog' => [
+            'class' => 'nooclik\blog\Blog',
+            'params' =>
+            [
+                // Включить работу с комментариями
+                'useComment' => true
+            ]
+        ]
+    ],

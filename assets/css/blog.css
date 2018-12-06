@@ -1,3 +1,31 @@
 .container-fluid {
     padding-top: 70px !important;
 }
+
+#block-action > div {
+    box-shadow: #ddd 1px 1px 1px 1px;
+    text-align: center;
+}
+
+.action-list {
+    list-style: none;
+}
+
+a {
+    color: #a94442
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+#comment-list {
+    list-style: none;
+}
+.pointer {
+    cursor: pointer;
+}
+
+.category-form .img-thumbnail img {
+    max-width: 250px;
+}

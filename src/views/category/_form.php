@@ -12,7 +12,7 @@ $this->title = 'Рубрика';
 
 <div class="category-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'category_title')->textInput() ?>
 
@@ -26,7 +26,12 @@ $this->title = 'Рубрика';
         ],
     ]); ?>
 
-    <?= $form->field($model, 'category_thumbnail')->textInput(['maxlength' => true]) ?>
+    <?php if (isset($model->category_thumbnail)): ?>
+        <div class="img-thumbnail">
+            <?= Html::img('/images/' . $model->category_thumbnail) ?>
+        </div>
+    <?php endif; ?>
+    <?= $form->field($model, 'image')->fileInput(['class' => 'btn btn-primary']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

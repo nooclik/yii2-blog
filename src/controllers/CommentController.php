@@ -3,17 +3,16 @@
 namespace nooclik\blog\controllers;
 
 use Yii;
-use nooclik\blog\models\Category;
-use nooclik\blog\models\CategorySearch;
+use nooclik\blog\models\Comment;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
 
 /**
- * CategoryController implements the CRUD actions for Category model.
+ * CommentController implements the CRUD actions for Comment model.
  */
-class CategoryController extends Controller
+class CommentController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,52 +30,41 @@ class CategoryController extends Controller
     }
 
     /**
-     * Lists all Category models.
+     * Lists all Comment models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Comment::find(),
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Category model.
+     * Displays a single Comment model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+        $seenComment = Comment::findOne($id);
+        $seenComment->seen = 1;
+        $seenComment->save();
 
-    public function actionForm($id = null)
-    {
-        $model = isset($id) ? Category::findOne($id) : new Category();
-        
-        $category = Category::getList();
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->image = UploadedFile::getInstance($model, 'image');
-            if ($model->image) {
-                $model->uploadImage();
-            }
+        $model = Comment::findOne($id);
+        if ($model->load(Yii::$app->request->post())){
             $model->save();
-            $this->redirect('/blog/category');
         }
-        return $this->render('_form', compact('model', 'category'));
+        return $this->render('_form', compact('model'));
     }
 
     /**
-     * Deletes an existing Category model.
+     * Deletes an existing Comment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -90,15 +78,15 @@ class CategoryController extends Controller
     }
 
     /**
-     * Finds the Category model based on its primary key value.
+     * Finds the Comment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Category the loaded model
+     * @return Comment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Category::findOne($id)) !== null) {
+        if (($model = Comment::findOne($id)) !== null) {
             return $model;
         }
 

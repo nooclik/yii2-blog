@@ -4,6 +4,7 @@ namespace nooclik\blog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "category".
@@ -14,10 +15,12 @@ use yii\behaviors\SluggableBehavior;
  * @property string $category_description Описание
  * @property int $category_parent Родительская категория
  * @property string $category_thumbnail Изображение
+ * @property string $image Изображение из формы
  *
  */
 class Category extends \yii\db\ActiveRecord
 {
+    public $image;
     /**
      * {@inheritdoc}
      */
@@ -35,6 +38,7 @@ class Category extends \yii\db\ActiveRecord
             [['category_title'], 'required'],
             [['category_title', 'category_description'], 'string'],
             [['category_parent'], 'integer'],
+            [['image'] , 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['category_slug', 'category_thumbnail'], 'string', 'max' => 200],
         ];
     }
@@ -62,7 +66,16 @@ class Category extends \yii\db\ActiveRecord
             'category_description' => 'Описание',
             'category_parent' => 'Родитель',
             'category_thumbnail' => 'Изображение',
+            'image' => 'Изображение',
         ];
+    }
+
+    public function uploadImage()
+    {
+        $img = time() . '.' . $this->image->extension;
+        $this->image->saveAs('images/' . $img);
+        $this->category_thumbnail = $img;
+        $this->image = null;
     }
 
     /**

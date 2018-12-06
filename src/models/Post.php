@@ -123,11 +123,27 @@ class Post extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Загрузка изображения записи
+     */
     public function imageUpload()
     {
         $img = time() . '.' . $this->image->extension;
         $this->image->saveAs('images/' . $img);
         $this->post_thumbnail = $img;
+        $this->image = null;
+    }
+
+    /**
+     * Имеются ли комментарии к записи
+     *
+     * @param $post_id
+     * @return bool
+     */
+    public static function haveComments($post_id): bool
+    {
+        $commets = (int)Comment::find()->where(['post_id' => $post_id])->count();
+        return $commets != 0 ? true : false;
     }
 
 

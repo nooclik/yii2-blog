@@ -15,10 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Новая рубрика', ['form'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"> </i> Новая рубрика', ['form'], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?= GridView::widget([

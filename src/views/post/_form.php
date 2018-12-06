@@ -1,6 +1,5 @@
 <?php
 
-use kartik\file\FileInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use vova07\imperavi\Widget;
@@ -30,7 +29,6 @@ $this->title = 'Запись';
                     'imageUpload' => Url::to(['image-upload']),
                     'imageManagerJson' => Url::to(['images-get']),
                     'imageDelete' => Url::to(['file-delete']),
-//                    'buttons' => ['html'],
                     'plugins' => [
                         'clips',
                         'fullscreen',
@@ -77,7 +75,14 @@ $this->title = 'Запись';
             <?php endif; ?>
         </div>
     </div>
-
     <?php ActiveForm::end(); ?>
+
+    <?php if (\nooclik\blog\models\Post::haveComments($model->id)) : ?>
+        <div class="row">
+            <div class="col-md-12">
+                <?= \nooclik\blog\widgets\CommentList::widget(['post_id' => $model->id]) ?>
+            </div>
+        </div>
+    <?php endif; ?>
 
 </div>

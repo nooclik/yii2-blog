@@ -12,7 +12,7 @@ class m181129_092034_create_table_posts extends Migration
      */
     public function up()
     {
-        $this->createTable('post', [
+        $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
             'post_title' => $this->text()->notNull()->comment('Заголовок'),
             'post_slug' => $this->string(200)->notNull()->comment('Слаг'),
@@ -31,6 +31,6 @@ class m181129_092034_create_table_posts extends Migration
      */
     public function down()
     {
-        $this->dropTable('posts');
+        $this->dropTable('{{%post}}');
     }
 }
