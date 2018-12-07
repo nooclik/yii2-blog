@@ -48,11 +48,12 @@ $this->title = 'Комментарий к записи: ' . $model->post->post_t
                 <h4 class="modal-title" id="myModalLabel">Ответ пользователю: <?= $model->user_name ?></h4>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="user_email" value="<?= $model->user_email ?>">
                 <textarea class="form-control" name="reply-text" id="reply-text" cols="30" rows="10" placeholder="Ответ на комментарий к записи: <?= $model->post->post_title ?>"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Отправить</button>
+                <button type="button" onclick="sendMessage()" class="btn btn-primary">Отправить</button>
             </div>
         </div>
     </div>

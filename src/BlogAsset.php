@@ -13,5 +13,6 @@ class BlogAsset extends AssetBundle
         'css/blog.css',
     ];
     public $js = [
+        'js/blog.js'
     ];
 }

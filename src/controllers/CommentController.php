@@ -57,10 +57,19 @@ class CommentController extends Controller
         $seenComment->save();
 
         $model = Comment::findOne($id);
-        if ($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post())) {
             $model->save();
         }
         return $this->render('_form', compact('model'));
+    }
+
+    public function actionSendMessage()
+    {
+        if (Yii::$app->request->isAjax) {
+            $post = Yii::$app->request->post();
+            Comment::sendMessage($post['user_email'], $post['text']);
+        }
+        return true;
     }
 
     /**

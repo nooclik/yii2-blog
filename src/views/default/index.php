@@ -15,3 +15,5 @@
         </div>
     </div>
 </div>
+<?php
+echo \nooclik\blog\widgets\category\Category::widget();

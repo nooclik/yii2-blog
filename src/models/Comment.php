@@ -78,6 +78,22 @@ class Comment extends \yii\db\ActiveRecord
     }
 
     /**
+     * Ответ на комментарий
+     *
+     * @param $sendTo
+     * @param $message
+     */
+    public static function sendMessage($sendTo, $message): void
+    {
+        Yii::$app->mailer->compose()
+            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setTo($sendTo)
+            ->setSubject('Ответ на Ваш комментарий')
+            ->setTextBody($message)
+            ->send();
+    }
+
+    /**
      * Количество новых комментариев
      *
      * @return int
