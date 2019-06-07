@@ -22,7 +22,7 @@ or add
 to the require section of your `composer.json` file.
 
 ```php
-yii migrate/create --migrationPath="vendor\nooclik\yii2-blog\src\migrations" 
+yii migrate --migrationPath="vendor\nooclik\yii2-blog\src\migrations" 
 ```
 
 Usage

@@ -30,17 +30,17 @@ class PostController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
+            /*'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['form'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['form'],
-                        'roles' => ['@']
+                        'roles' => ['*']
                     ],
                 ]
-            ],
+            ],*/
         ];
     }
 
@@ -76,7 +76,6 @@ class PostController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
 
     public function actionForm($id = null, $post_type)
     {

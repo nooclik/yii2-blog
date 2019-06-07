@@ -19,8 +19,10 @@ class m181129_092034_create_table_posts extends Migration
             'post_content' => $this->text()->notNull()->comment('Содержимое'),
             'post_author_id' => $this->integer()->comment('ID автора'),
             'post_status' => $this->smallInteger()->notNull()->defaultValue(0)->comment('Статус'),
-            'post_type' => $this->smallInteger()->notNull()->comment('Тип (запись/страница)'),
+            'post_type' => $this->string(15)->notNull()->comment('Тип (запись/страница)'),
             'post_thumbnail' => $this->string('20')->comment('Изображение записи'),
+            'post_meta_keywords' => $this->string(100),
+            'post_meta_description' => $this->string(100),
             'created_at' => $this->integer()->comment('Создано'),
             'updated_at' => $this->integer()->comment('Обновлено'),
         ]);
