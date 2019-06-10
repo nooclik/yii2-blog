@@ -13,7 +13,7 @@ class m190608_110211_create_table_options extends Migration
     public function up()
     {
         $this->createTable('options', [
-            'name' => $this->string(50),
+            'key' => $this->string(50),
             'value' => $this->string(100)
         ]);
     }
