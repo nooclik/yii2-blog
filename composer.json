@@ -14,7 +14,8 @@
         "yiisoft/yii2": "~2.0.0",
         "vova07/yii2-imperavi-widget": "*",
         "kartik-v/yii2-widget-select2": "@dev",
-        "zabachok/yii2-sluggable-behavior": "*"
+        "zabachok/yii2-sluggable-behavior": "*",
+        "dmstr/yii2-adminlte-asset": "^2.1"
     },
     "autoload": {
         "psr-4": {
