@@ -136,6 +136,11 @@ class Post extends \yii\db\ActiveRecord
         $this->image = null;
     }
 
+    public static function postByCategory($slug)
+    {
+        retutn
+    }
+
     /**
      * Имеются ли комментарии к записи
      *

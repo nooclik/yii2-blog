@@ -91,4 +91,9 @@ class Category extends \yii\db\ActiveRecord
     {
         return Category::find()->select('category_title, id')->indexBy('id')->orderBy('category_title')->column();
     }
+
+    public static function find()
+    {
+        return new CustomQuery(get_called_class());
+    }
 }
