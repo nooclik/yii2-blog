@@ -14,12 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;;
 <div class="category-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
+
 
     <p>
         <?= Html::a('<i class="glyphicon glyphicon-plus"> </i> Новая рубрика', ['form'], ['class' => 'btn btn-default']) ?>
     </p>
-
+    <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

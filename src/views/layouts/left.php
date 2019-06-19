@@ -1,11 +1,14 @@
-<ul class="action-list">
-    <li>
-        <i class="glyphicon glyphicon-tasks"></i><a href="/blog/category"> Рубрики</a>
+<ul>
+    <li class="nav-item">
+        <a href="/blog/category" class="nav-link"> Рубрики</a>
     </li>
-    <li>
-        <i class="glyphicon glyphicon-pushpin"></i><a href="/blog/post"> Записи/страницы</a>
+    <li class="nav-item">
+        <a href="/blog/post" class="nav-link"> Записи/страницы</a>
     </li>
-    <li>
-        <i class="glyphicon glyphicon-comment"></i><a href="/blog/comment"> Комментарии</a>
+    <li class="nav-item">
+        <a href="/blog/comment" class="nav-link"> Комментарии</a>
+    </li>
+    <li class="nav-item">
+        <a href="/blog/banners" class="nav-link"> Баннеры</a>
     </li>
 </ul>

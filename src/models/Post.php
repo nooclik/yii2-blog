@@ -3,7 +3,7 @@
 namespace nooclik\blog\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
+use zabachok\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\web\UploadedFile;
@@ -77,8 +77,8 @@ class Post extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios['single'] = ['post_title', 'category', 'post_content', 'post_status', 'post_thumbnail', 'post_meta_description', 'post_meta_keywords'];
-        $scenarios['page'] = ['post_title', 'post_content', 'post_status', 'post_meta_description', 'post_meta_keywords'];
+        $scenarios['single'] = ['post_title', 'post_slug', 'category', 'post_content', 'post_status', 'post_thumbnail', 'post_meta_description', 'post_meta_keywords'];
+        $scenarios['page'] = ['post_title', 'post_slug', 'post_content', 'post_status', 'post_meta_description', 'post_meta_keywords'];
         return $scenarios;
     }
 
@@ -111,6 +111,8 @@ class Post extends \yii\db\ActiveRecord
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'post_title',
                 'slugAttribute' => 'post_slug',
+//                'immutable'=> false,
+                'ensureUnique' => true,
             ],
             'time' => [
                 'class' => TimestampBehavior::className(),
@@ -153,6 +155,6 @@ class Post extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new PostQuery(get_called_class());
+        return new CustomQuery(get_called_class());
     }
 }

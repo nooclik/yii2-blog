@@ -13,7 +13,8 @@
     "require": {
         "yiisoft/yii2": "~2.0.0",
         "vova07/yii2-imperavi-widget": "*",
-        "kartik-v/yii2-widget-select2": "@dev"
+        "kartik-v/yii2-widget-select2": "@dev",
+        "zabachok/yii2-sluggable-behavior": "*"
     },
     "autoload": {
         "psr-4": {

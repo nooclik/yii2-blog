@@ -13,6 +13,12 @@ class BlogAsset extends AssetBundle
         'css/blog.css',
     ];
     public $js = [
-        'js/blog.js'
+        'js/blog.js',
     ];
+
+    public $depends = [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
+    ];
+
 }

@@ -15,14 +15,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="posts-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> Новая запись', ['form', 'post_type' => POST::SCENARIO_SINGLE], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> Новая страница', ['form', 'post_type' => POST::SCENARIO_PAGE], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> Новая запись', ['form', 'post_type' => POST::SCENARIO_SINGLE], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> Новая страница', ['form', 'post_type' => POST::SCENARIO_PAGE], ['class' => 'btn btn-primary']) ?>
     </p>
-
+    <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
