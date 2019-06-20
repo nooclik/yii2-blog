@@ -3,6 +3,7 @@
 namespace nooclik\blog\models;
 
 use Yii;
+use yii\db\mssql\PDO;
 use zabachok\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
@@ -136,9 +137,19 @@ class Post extends \yii\db\ActiveRecord
         $this->image = null;
     }
 
+    /**
+     * Возвращает записи по слагу категории
+     * @param $slug
+     * @return array
+     * @throws \yii\db\Exception
+     */
     public static function postByCategory($slug)
     {
-        retutn
+        return Yii::$app->db->createCommand('SELECT p.*, c.* FROM post_category pc 
+                                                    LEFT JOIN post p ON p.id = pc.post_id 
+                                                    LEFT JOIN category c on pc.category_id = c.id 
+                                                    WHERE (SELECT id FROM category WHERE category_slug = :slug)')
+            ->bindValue(':slug', $slug, PDO::PARAM_STR)->queryAll();
     }
 
     /**
