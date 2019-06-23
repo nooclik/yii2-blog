@@ -19,6 +19,7 @@
                     ['label' => 'Записи', 'icon' => 'file-code-o', 'url' => ['/blog/post']],
                     ['label' => 'Комментарии', 'icon' => 'file-code-o', 'url' => ['/blog/comment']],
                     ['label' => 'Баннеры', 'icon' => 'file-code-o', 'url' => ['/blog/banners']],
+                    ['label' => 'Параметры', 'icon' => 'file-code-o', 'url' => ['/blog/option']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                 ],
             ]

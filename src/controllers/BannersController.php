@@ -4,6 +4,7 @@ namespace nooclik\blog\controllers;
 
 use Yii;
 use nooclik\blog\models\Banners;
+use yii\base\Exception;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
@@ -18,6 +19,15 @@ class BannersController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
             ],
         ];
     }
