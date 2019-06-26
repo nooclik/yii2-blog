@@ -85,4 +85,6 @@ $this->title = 'Запись';
         </div>
     <?php endif; ?>
 
+    <?= $this->render('_attachment', compact('modelAttachment')) ?>
+
 </div>

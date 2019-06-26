@@ -3,6 +3,7 @@
 namespace nooclik\blog\models;
 
 use Yii;
+use yii\base\DynamicModel;
 use yii\db\mssql\PDO;
 use zabachok\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -98,6 +99,7 @@ class Post extends \yii\db\ActiveRecord
             'category' => 'Категория',
             'post_type' => 'Тип',
             'image' => 'Изображение',
+            'attachment' => 'Вложение',
             'post_meta_description' => 'Мета-descriptoin',
             'post_meta_keywords' => 'Мета-keywords',
             'created_at' => 'Создано',
@@ -135,6 +137,45 @@ class Post extends \yii\db\ActiveRecord
         $this->image->saveAs('images/' . $img);
         $this->post_thumbnail = $img;
         $this->image = null;
+    }
+
+    /**
+     * Модель загрузки вложения
+     * @return DynamicModel
+     */
+    public static function modelAttachment()
+    {
+        $model = new DynamicModel(['title', 'file']);
+        $model->addRule(['title'], 'string');
+        $model->addRule(['file'], 'file');
+        $model->addRule(['title', 'file'], 'required');
+
+        return $model;
+    }
+
+    /**
+     * Возвращает вложения записи
+     * @return array
+     * @throws \yii\db\Exception
+     */
+    public function getAttachment()
+    {
+        return Yii::$app->db->createCommand('SELECT * FROM attachment WHERE post_id = :post')
+            ->bindValue(':post', $this->id)->queryAll();
+    }
+
+    /**
+     * Загрузка вложения записи
+     */
+    public function attachmentUpload($attachment)
+    {
+//        $file = $attachment->baseName . '.' . $attachment->extension;
+        $attachment->saveAs('uploads/attachment/' . $file);
+    }
+
+    public function addAttachment($post)
+    {
+        ;
     }
 
     /**

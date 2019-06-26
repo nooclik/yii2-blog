@@ -80,6 +80,7 @@ class PostController extends Controller
     public function actionForm($id = null, $post_type)
     {
         $model = isset($id) ? Post::findOne($id) : new Post();
+        $modelAttachment = Post::modelAttachment();
 
         if (!$model->isNewRecord) {
             $model->category = PostCategory::getCategoryByPost($id);
@@ -106,6 +107,12 @@ class PostController extends Controller
             if ($model->image) {
                 $model->imageUpload();
             }
+
+            $model->attachment = UploadedFile::getInstance($model, 'attachment');
+            if($model->attachment) {
+                $model->attachmentUpload();
+            }
+
             $model->post_meta_keywords = serialize($model->post_meta_keywords);
             $model->save();
 
@@ -116,10 +123,13 @@ class PostController extends Controller
                 }
             }
 
-            $this->redirect('index');
+            if ($modelAttachment->load($post = Yii::$app->request->post()) && $modelAttachment->validate() ){
+                $attachment = UploadedFile::getInstance($th)
+                Post::addAttachment($post);
+            }
         }
 
-        return $this->render('_form', compact('model', 'category', 'status'));
+        return $this->render('_form', compact('model', 'category', 'status', 'modelAttachment'));
     }
 
     public function actionDelete($id)
