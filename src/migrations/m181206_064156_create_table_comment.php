@@ -12,6 +12,12 @@ class m181206_064156_create_table_comment extends Migration
      */
     public function safeUp()
     {
+        $tableOptions = null;
+
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('{{%comment}}', [
             'id' => $this->primaryKey(),
             'post_id' => $this->integer()->notNull()->comment('Запись'),
@@ -22,7 +28,7 @@ class m181206_064156_create_table_comment extends Migration
             'publish' => $this->integer(1)->defaultValue(0)->comment('Опубликовано'),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer()
-        ]);
+        ], $tableOptions);
 
         $this->addForeignKey(
             'fk_comment_post',

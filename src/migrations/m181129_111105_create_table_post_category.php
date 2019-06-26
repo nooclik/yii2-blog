@@ -12,10 +12,16 @@ class m181129_111105_create_table_post_category extends Migration
      */
     public function up()
     {
+        $tableOptions = null;
+
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('{{%post_category}}', [
             'post_id' => $this->integer(),
             'category_id' => $this->integer(),
-        ]);
+        ], $tableOptions);
 
         $this->createIndex('idx_post_post_category', '{{%post_category}}', 'post_id');
         $this->createIndex('idx_category_post_category', '{{%post_category}}', 'category_id');

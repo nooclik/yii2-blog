@@ -12,6 +12,12 @@ class m181129_092034_create_table_posts extends Migration
      */
     public function up()
     {
+        $tableOptions = null;
+
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
             'post_title' => $this->text()->notNull()->comment('Заголовок'),
@@ -25,7 +31,7 @@ class m181129_092034_create_table_posts extends Migration
             'post_meta_description' => $this->string(100),
             'created_at' => $this->integer()->comment('Создано'),
             'updated_at' => $this->integer()->comment('Обновлено'),
-        ]);
+        ], $tableOptions);
     }
 
     /**
