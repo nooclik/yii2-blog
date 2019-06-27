@@ -145,8 +145,8 @@ class Post extends \yii\db\ActiveRecord
      */
     public static function modelAttachment()
     {
-        $model = new DynamicModel(['title', 'file']);
-        $model->addRule(['title'], 'string');
+        $model = new DynamicModel(['title', 'file', 'type']);
+        $model->addRule(['title', 'type'], 'string');
         $model->addRule(['file'], 'file');
         $model->addRule(['title', 'file'], 'required');
 
@@ -169,13 +169,42 @@ class Post extends \yii\db\ActiveRecord
      */
     public function attachmentUpload($attachment)
     {
-//        $file = $attachment->baseName . '.' . $attachment->extension;
+        $file = $attachment->baseName . '.' . $attachment->extension;
         $attachment->saveAs('uploads/attachment/' . $file);
     }
 
-    public function addAttachment($post)
+    /**
+     * Добавление вложения к записи
+     * @param $post
+     * @param $attachment
+     * @throws \yii\db\Exceptionэ
+     */
+    public function addAttachment($post, $attachment)
     {
-        ;
+        $this->attachmentUpload($attachment);
+        Yii::$app->db->createCommand()->insert('attachment', [
+            'title' => $post['title'],
+            'file' => $attachment->baseName . '.' . $attachment->extension,
+            'post_id' => $this->id,
+            'type' => $post['type']
+        ])->execute();
+    }
+
+    /**
+     * Удаление вложения
+     * @param $id
+     * @return int
+     * @throws \yii\db\Exception
+     */
+    public static function deleteAttachment($id)
+    {
+        $file = Yii::$app->db->createCommand('SELECT file FROM attachment WHERE id = :id')
+            ->bindValue(':id', $id)->queryScalar();
+        unlink('uploads/attachment/' . $file);
+
+        return Yii::$app->db->createCommand()->delete('attachment', [
+            'id' => $id
+        ])->execute();
     }
 
     /**

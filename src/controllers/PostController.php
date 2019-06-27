@@ -108,11 +108,6 @@ class PostController extends Controller
                 $model->imageUpload();
             }
 
-            $model->attachment = UploadedFile::getInstance($model, 'attachment');
-            if($model->attachment) {
-                $model->attachmentUpload();
-            }
-
             $model->post_meta_keywords = serialize($model->post_meta_keywords);
             $model->save();
 
@@ -122,21 +117,39 @@ class PostController extends Controller
                     PostCategory::save($model->id, (int)$item);
                 }
             }
+        }
 
-            if ($modelAttachment->load($post = Yii::$app->request->post()) && $modelAttachment->validate() ){
-                $attachment = UploadedFile::getInstance($th)
-                Post::addAttachment($post);
-            }
+        if ($modelAttachment->load($post = Yii::$app->request->post())){
+            $file = UploadedFile::getInstance($modelAttachment, 'file');
+            $model->addAttachment($modelAttachment, $file);
         }
 
         return $this->render('_form', compact('model', 'category', 'status', 'modelAttachment'));
     }
 
+    /**
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Удаляет вложение
+     * @throws \yii\db\Exception
+     */
+    public function actionDeleteAttachment()
+    {
+        if (Yii::$app->request->isAjax) {
+            Post::deleteAttachment(Yii::$app->request->post()['id']);
+        }
     }
 
     protected function findModel($id)
