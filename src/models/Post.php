@@ -2,8 +2,10 @@
 
 namespace nooclik\blog\models;
 
+use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\base\DynamicModel;
+use yii\db\ActiveRecord;
 use yii\db\mssql\PDO;
 use zabachok\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -119,6 +121,10 @@ class Post extends \yii\db\ActiveRecord
             ],
             'time' => [
                 'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ]
             ],
             'blameable' => [
                 'class' => BlameableBehavior::className(),
@@ -126,6 +132,15 @@ class Post extends \yii\db\ActiveRecord
                 'updatedByAttribute' => 'post_author_id',
             ]
         ];
+    }
+
+    /**
+     * Переводы записи
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTranslate()
+    {
+        return $this->hasMany(PostLang::class, ['post_id' => 'id']);
     }
 
     /**
@@ -186,7 +201,7 @@ class Post extends \yii\db\ActiveRecord
             'title' => $post['title'],
             'file' => $attachment->baseName . '.' . $attachment->extension,
             'post_id' => $this->id,
-            'type' => $post['type']
+            'file_type' => $post['type']
         ])->execute();
     }
 
@@ -213,13 +228,49 @@ class Post extends \yii\db\ActiveRecord
      * @return array
      * @throws \yii\db\Exception
      */
-    public static function postByCategory($slug)
+    public static function byCategorySlug($slug)
     {
         return Yii::$app->db->createCommand('SELECT p.*, c.* FROM post_category pc 
                                                     LEFT JOIN post p ON p.id = pc.post_id 
                                                     LEFT JOIN category c on pc.category_id = c.id 
                                                     WHERE (SELECT id FROM category WHERE category_slug = :slug)')
             ->bindValue(':slug', $slug, PDO::PARAM_STR)->queryAll();
+    }
+
+    /**
+     * Возвращает записи по ID категории
+     * @param $categoryId
+     * @throws \Throwable
+     */
+    public static function byCategoryId($categoryId)
+    {
+        $posts = Yii::$app->db->cache(function () use ($categoryId) {
+            return Yii::$app->db->createCommand('SELECT p.*, c.* FROM post_category pc 
+                                                    LEFT JOIN post p ON p.id = pc.post_id 
+                                                    LEFT JOIN category c on pc.category_id = c.id 
+                                                    WHERE pc.category_id = ' . $categoryId)
+                ->queryAll();
+        }, 60);
+
+        return $posts;
+    }
+
+    /**
+     * Возвращает последние новости
+     * @param $categoryId
+     * @param $limit
+     * @throws \Throwable
+     */
+    public static function latestNews($categoryId, $limit)
+    {
+        $posts = Yii::$app->db->cache(function () use ($categoryId, $limit) {
+            return Post::find()->leftJoin('post_category', 'post.id=post_category.post_id')
+                ->where(['post_category.category_id' => $categoryId, 'post_type' => self::POST_TYPE_SINGLE])
+                ->orderBy(['updated_at' => SORT_DESC])->asArray()->limit($limit)->all();
+        }, 60);
+
+
+        return $posts;
     }
 
     /**
@@ -242,5 +293,47 @@ class Post extends \yii\db\ActiveRecord
     public static function find()
     {
         return new CustomQuery(get_called_class());
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+
+            if (!empty($this->created_at)) {
+                $this->created_at = strtotime($this->created_at);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Если язык по умолчанию не соответствует текущему языку, возвращаем переводы
+     * Если не пустая дата создания, приводим к формату, иначе задаем текущую дату
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        if (Yii::$app->multiLanguage->default_lang != Yii::$app->language) {
+            $translate = Yii::$app->db->createCommand('SELECT post_title, post_content FROM post_lang 
+                                                      WHERE post_id = ' . $this->id . ' AND lang = "' . Yii::$app->language . '"')
+                ->queryOne();
+
+            if (!empty($translate)) {
+                $this->post_title = $translate['post_title'];
+                $this->post_content = $translate['post_content'];
+            }
+        }
+
+        if (!empty($this->created_at)) {
+            $this->created_at = date('d.m.Y', $this->created_at);
+        }
     }
 }

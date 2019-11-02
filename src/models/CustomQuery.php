@@ -2,8 +2,8 @@
 
 namespace nooclik\blog\models;
 
-
 use yii\db\ActiveQuery;
+use Yii;
 
 /**
  * Class CustomQuery

@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use vova07\imperavi\Widget;
 use kartik\select2\Select2;
 use yii\helpers\Url;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model nooclik\blog\models\Post */
@@ -22,6 +23,7 @@ $this->title = 'Запись';
     </div>
     <div class="row">
         <div class="col-md-9">
+            <?= $form->field($model, 'post_slug')->textInput(['disabled' => 0]) ?>
             <?= $form->field($model, 'post_content')->widget(Widget::className(), [
                 'settings' => [
                     'lang' => 'ru',
@@ -53,10 +55,34 @@ $this->title = 'Запись';
 
             <div class="form-group">
                 <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
-                <?= Html::a('Отмена', 'index', ['class' => 'btn btn-default']) ?>
+                <?= Html::a('Закрыть', 'index', ['class' => 'btn btn-default']) ?>
             </div>
 
+            <?php if (!empty($model->translate)) : ?>
+                <div class="form-group">
+                    <?php foreach ($model->translate as $item) : ?>
+                        <?= Html::a('<i class="glyphicon glyphicon-pencil"> </i>' . $item['lang'],
+                            ['/blog/post/form-translate', 'id' => $item['id']],
+                            ['class' => 'btn btn-default']) ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <div class="form-group">
+                    <?= Html::a('<i class="glyphicon glyphicon-plus"></i> en',
+                        Url::to(['post/form-translate', 'post_id' => $model->id, 'lang_id' => 'en']),
+                        ['class' => 'btn btn-default']) ?>
+                </div>
+            <?php endif; ?>
+
             <?= $form->field($model, 'post_status')->dropDownList($status) ?>
+
+            <?= $form->field($model, 'created_at')->widget(DatePicker::classname(), [
+                'options' => ['placeholder' => 'Дата создания...'],
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'dd.mm.yyyy'
+                ]
+            ]); ?>
 
             <?php if ($model->getScenario() == \nooclik\blog\models\Post::SCENARIO_SINGLE): ?>
                 <?= $form->field($model, 'category')->widget(Select2::classname(), [
@@ -69,7 +95,7 @@ $this->title = 'Запись';
                     ],
                 ]) ?>
                 <?php if ($model->post_thumbnail) : ?>
-                    <?= Html::img('/images/' . $model->post_thumbnail, ['class' => 'img-thumbnail']) ?>
+                    <?= Html::img('/web/images/' . $model->post_thumbnail, ['class' => 'img-thumbnail']) ?>
                 <?php endif; ?>
                 <?= $form->field($model, 'image')->fileInput(['class' => 'btn btn-primary']) ?>
             <?php endif; ?>
@@ -85,6 +111,6 @@ $this->title = 'Запись';
         </div>
     <?php endif; ?>
 
-    <?= $this->render('_attachment', compact('model','modelAttachment')) ?>
+    <?= $this->render('_attachment', compact('model', 'modelAttachment')) ?>
 
 </div>

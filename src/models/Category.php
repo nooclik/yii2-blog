@@ -87,6 +87,17 @@ class Category extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * Возвращает записи категории
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getPosts()
+    {
+        return $this->hasMany(Post::class, ['id' => 'post_id'])->viaTable('post_category', ['category_id' => 'id']);
+    }
+
+
     public static function getList()
     {
         return Category::find()->select('category_title, id')->indexBy('id')->orderBy('category_title')->column();

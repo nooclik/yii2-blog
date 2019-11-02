@@ -15,7 +15,10 @@
         "vova07/yii2-imperavi-widget": "*",
         "kartik-v/yii2-widget-select2": "@dev",
         "zabachok/yii2-sluggable-behavior": "*",
-        "dmstr/yii2-adminlte-asset": "^2.1"
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "dmstr/yii2-adminlte-asset": "^2.1",
+        "skeeks/yii2-multi-language": "^1.0.0",
+        "kartik-v/yii2-widget-datetimepicker": "*"
     },
     "autoload": {
         "psr-4": {
